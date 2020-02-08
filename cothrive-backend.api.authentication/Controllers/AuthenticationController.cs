@@ -1,6 +1,7 @@
 ﻿using cothrive_backend.api.authentication.Application.Authentication.Queries;
 using cothrive_backend.api.authentication.Application.User.Queries.GetUserDetail;
 using cothrive_backend.api.authentication.Application.User.Queries.GetUsersList;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -40,9 +41,10 @@ namespace cothrive_backend.api.authentication.Controllers
         {
             return Ok(await Mediator.Send(new GetUsersListQuery()));
         }
+
         [HttpGet]
         [Route("private")]
-
+        [Authorize]
         public IActionResult Private()
         {
             return Ok(new

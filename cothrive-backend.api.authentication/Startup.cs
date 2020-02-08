@@ -6,7 +6,6 @@ using cothrive_backend.api.authentication.Application.Authentication.Queries;
 using cothrive_backend.api.authentication.Domain.Entities;
 using cothrive_backend.api.authentication.Helpers;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace cothrive_backend.api.authentication
 {
@@ -120,8 +120,8 @@ namespace cothrive_backend.api.authentication
                        ClockSkew = TimeSpan.Zero // remove delay of token when expire
                     };
                });
-            services.AddCors(c => c.AddDefaultPolicy(p => { p.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin(); }));
             services.AddAuthorization();
+            services.AddCors(c => c.AddDefaultPolicy(p => { p.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin(); }));
             services.AddControllers();
         }
 
@@ -133,16 +133,6 @@ namespace cothrive_backend.api.authentication
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            //app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
             var basePath = Environment.GetEnvironmentVariable("API_PATH_BASE");
             var swaggerString = "/swagger/v1/swagger.json";
 
@@ -165,8 +155,15 @@ namespace cothrive_backend.api.authentication
             });
 
 
+            app.UseRouting();
             app.UseHttpsRedirection();
             app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseCors("AllowAllHeaders");
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }
