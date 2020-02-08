@@ -27,6 +27,7 @@ namespace cothrive_backend.api.authentication.Controllers
             return Ok(response);
         }
         [HttpGet("{id}")]
+        [Authorize(Roles = "Developer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(int id)
@@ -37,6 +38,7 @@ namespace cothrive_backend.api.authentication.Controllers
         }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = "Guest")]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await Mediator.Send(new GetUsersListQuery()));
@@ -44,7 +46,7 @@ namespace cothrive_backend.api.authentication.Controllers
 
         [HttpGet]
         [Route("private")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public IActionResult Private()
         {
             return Ok(new

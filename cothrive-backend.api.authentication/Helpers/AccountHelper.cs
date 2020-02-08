@@ -35,7 +35,7 @@ namespace cothrive_backend.api.authentication.Helpers
 
             var token = new JwtSecurityToken(
                 _configuration["JwtIssuer"],
-                _configuration["JwtIssuer"],
+                _configuration["Auth0:ApiIdentifier"],
                 claims,
                 expires: expires,
                 signingCredentials: creds

@@ -15,6 +15,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Claims;
+using cothrive_backend.api.authentication.Auth0;
+using Microsoft.AspNetCore.Authorization;
 
 namespace cothrive_backend.api.authentication
 {
@@ -103,6 +106,7 @@ namespace cothrive_backend.api.authentication
             services.AddRouting(o => o.LowercaseUrls = true);
 
             //====== Add AddAuthentication =====
+            string domain = $"https://{Configuration["Auth0:Domain"]}/";
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -112,15 +116,25 @@ namespace cothrive_backend.api.authentication
                {
                    x.RequireHttpsMetadata = false;
                    x.SaveToken = true;
+                   x.Authority = domain;
+                   x.Audience = Configuration["Auth0:ApiIdentifier"];
                    x.TokenValidationParameters = new TokenValidationParameters
                    {
+                       //NameClaimType = ClaimTypes.NameIdentifier
                        ValidIssuer = Configuration["JwtIssuer"],
-                       ValidAudience = Configuration["JwtIssuer"],
+                       ValidAudience = Configuration["Auth0:ApiIdentifier"],
                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtKey"])),
-                       ClockSkew = TimeSpan.Zero // remove delay of token when expire
-                    };
+                       ClockSkew = TimeSpan.Zero, // remove delay of token when expire
+                       RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+                   };
                });
-            services.AddAuthorization();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("read:messages", policy => policy.Requirements.Add(new HasScopeRequirement("read:messages", domain)));
+            });
+
+            // register the scope authorization handler
+            services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
             services.AddCors(c => c.AddDefaultPolicy(p => { p.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin(); }));
             services.AddControllers();
         }
