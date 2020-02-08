@@ -1,0 +1,9 @@
+D:\work\cothrive-backend\cothrive-backend\bin\Debug\netcoreapp3.0\appsettings.Development.json
+D:\work\cothrive-backend\cothrive-backend\bin\Debug\netcoreapp3.0\appsettings.json
+D:\work\cothrive-backend\cothrive-backend\bin\Debug\netcoreapp3.0\Properties\launchSettings.json
+D:\work\cothrive-backend\cothrive-backend\obj\Debug\netcoreapp3.0\cothrive-backend.csprojAssemblyReference.cache
+D:\work\cothrive-backend\cothrive-backend\obj\Debug\netcoreapp3.0\staticwebassets\cothrive-backend.StaticWebAssets.Manifest.cache
+D:\work\cothrive-backend\cothrive-backend\obj\Debug\netcoreapp3.0\staticwebassets\cothrive-backend.StaticWebAssets.xml
+D:\work\cothrive-backend\cothrive-backend\obj\Debug\netcoreapp3.0\cothrive-backend.AssemblyInfoInputs.cache
+D:\work\cothrive-backend\cothrive-backend\obj\Debug\netcoreapp3.0\cothrive-backend.AssemblyInfo.cs
+D:\work\cothrive-backend\cothrive-backend\obj\Debug\netcoreapp3.0\cothrive-backend.RazorTargetAssemblyInfo.cache
